@@ -37,7 +37,7 @@ public class PotteryRecipeGenerator extends ResourceGenerator {
     }
 
     public RecipeBuilder recipe(String location){
-        this.cache.trackToBeGeneratedResource(ResourceType.DATA, this.modid, "recipes", location, ".json");
+        this.cache.trackToBeGeneratedResource(ResourceType.DATA, this.modid, "recipe", location, ".json");
         return this.recipes.computeIfAbsent(ResourceLocation.fromNamespaceAndPath(this.modid, location), i -> new RecipeBuilder());
     }
 
@@ -118,7 +118,7 @@ public class PotteryRecipeGenerator extends ResourceGenerator {
             json.add("recipe", recipeJson);
 
             // Save the recipe
-            this.cache.saveJsonResource(ResourceType.DATA, json, location.getNamespace(), "recipes", location.getPath());
+            this.cache.saveJsonResource(ResourceType.DATA, json, location.getNamespace(), "recipe", location.getPath());
         }
     }
 
