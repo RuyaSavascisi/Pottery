@@ -6,9 +6,7 @@
     5,
     1
   ],
-  "dye_ingredient": {
-    "item": "minecraft:green_dye"
-  },
+  "dye_ingredient": "minecraft:green_dye",
   "recipe": {
     "show_notification": true,
     "pattern": [
@@ -16,9 +14,7 @@
       "###"
     ],
     "key": {
-      "#": {
-        "tag": "minecraft:decorated_pot_ingredients"
-      }
+      "#": "#minecraft:decorated_pot_ingredients"
     },
     "result": {
       "id": "pottery:small_pot_green"

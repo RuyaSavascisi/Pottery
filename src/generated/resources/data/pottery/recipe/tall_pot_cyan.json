@@ -6,9 +6,7 @@
     2,
     0
   ],
-  "dye_ingredient": {
-    "item": "minecraft:cyan_dye"
-  },
+  "dye_ingredient": "minecraft:cyan_dye",
   "recipe": {
     "show_notification": true,
     "pattern": [
@@ -17,12 +15,8 @@
       " B "
     ],
     "key": {
-      "B": {
-        "item": "minecraft:brick"
-      },
-      "#": {
-        "tag": "minecraft:decorated_pot_ingredients"
-      }
+      "B": "minecraft:brick",
+      "#": "#minecraft:decorated_pot_ingredients"
     },
     "result": {
       "id": "pottery:tall_pot_cyan"
