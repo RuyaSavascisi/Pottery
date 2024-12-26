@@ -7,8 +7,8 @@ import com.supermartijn642.core.ClientUtils;
 import com.supermartijn642.core.render.TextureAtlases;
 import com.supermartijn642.pottery.Pottery;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
+import net.minecraft.client.renderer.block.model.BakedOverrides;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
@@ -158,7 +158,7 @@ public class PotBakedModel implements BakedModel {
             float v = newSprite.getV0() + (Float.intBitsToFloat(vertexData[offset + 1]) - oldSprite.getV0()) / oldHeight * newHeight;
             vertexData[offset + 1] = Float.floatToRawIntBits(v);
         }
-        return new BakedQuad(vertexData, quad.getTintIndex(), quad.getDirection(), newSprite, quad.isShade());
+        return new BakedQuad(vertexData, quad.getTintIndex(), quad.getDirection(), newSprite, quad.isShade(), quad.getLightEmission());
     }
 
     private static int findUVOffset(VertexFormat vertexFormat){
@@ -206,8 +206,8 @@ public class PotBakedModel implements BakedModel {
     }
 
     @Override
-    public ItemOverrides getOverrides(){
-        return this.original.getOverrides();
+    public BakedOverrides overrides(){
+        return this.original.overrides();
     }
 
     private record PotData(PotType type, PotColor color, Direction facing, PotDecorations decorations) {

@@ -13,9 +13,7 @@
       " # "
     ],
     "key": {
-      "#": {
-        "tag": "minecraft:decorated_pot_ingredients"
-      }
+      "#": "#minecraft:decorated_pot_ingredients"
     },
     "result": {
       "id": "pottery:base_pot_blank"

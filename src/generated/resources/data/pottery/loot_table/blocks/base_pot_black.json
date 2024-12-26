@@ -5,34 +5,35 @@
       "rolls": 1.0,
       "entries": [
         {
+          "type": "minecraft:alternatives",
           "children": [
             {
+              "type": "minecraft:dynamic",
               "conditions": [
                 {
-                  "predicate": {
-                    "items": "#minecraft:breaks_decorated_pots"
-                  },
-                  "condition": "minecraft:match_tool"
+                  "block": "pottery:base_pot_black",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "cracked": "true"
+                  }
                 }
               ],
-              "name": "minecraft:sherds",
-              "type": "minecraft:dynamic"
+              "name": "minecraft:sherds"
             },
             {
+              "type": "minecraft:item",
               "functions": [
                 {
-                  "source": "block_entity",
+                  "function": "minecraft:copy_components",
                   "include": [
                     "minecraft:pot_decorations"
                   ],
-                  "function": "minecraft:copy_components"
+                  "source": "block_entity"
                 }
               ],
-              "name": "pottery:base_pot_black",
-              "type": "minecraft:item"
+              "name": "pottery:base_pot_black"
             }
-          ],
-          "type": "minecraft:alternatives"
+          ]
         }
       ]
     }

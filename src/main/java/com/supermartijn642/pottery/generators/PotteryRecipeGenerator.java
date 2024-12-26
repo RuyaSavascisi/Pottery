@@ -10,14 +10,18 @@ import com.supermartijn642.core.registry.Registries;
 import com.supermartijn642.pottery.Pottery;
 import com.supermartijn642.pottery.content.PotColor;
 import com.supermartijn642.pottery.content.PotType;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,6 +47,7 @@ public class PotteryRecipeGenerator extends ResourceGenerator {
 
     @Override
     public void generate(){
+        HolderLookup.RegistryLookup<Item> lookup = ResourceGenerator.registryAccess.lookupOrThrow(net.minecraft.core.registries.Registries.ITEM);
         for(PotType type : PotType.values()){
             for(PotColor color : PotColor.values()){
                 RecipeBuilder recipe = this.recipe(type.getIdentifier(color));
@@ -61,7 +66,7 @@ public class PotteryRecipeGenerator extends ResourceGenerator {
                             "# #",
                             "#B#"
                         ).sherds(8, 6, 5, 3)
-                        .input('P', Ingredient.of(Items.STONE_PRESSURE_PLATE, Items.POLISHED_BLACKSTONE_PRESSURE_PLATE))
+                        .input('P', Items.STONE_PRESSURE_PLATE, Items.POLISHED_BLACKSTONE_PRESSURE_PLATE)
                         .input('B', Items.BRICK);
                     case WIDE -> recipe.pattern(
                             "# #",
@@ -81,7 +86,7 @@ public class PotteryRecipeGenerator extends ResourceGenerator {
                 }
                 if(color != PotColor.BLANK)
                     recipe.dye(color.getDyeIngredient());
-                recipe.input('#', Ingredient.of(ItemTags.DECORATED_POT_INGREDIENTS))
+                recipe.input('#', ItemTags.DECORATED_POT_INGREDIENTS)
                     .output(type.getItem(color));
             }
         }
@@ -103,14 +108,22 @@ public class PotteryRecipeGenerator extends ResourceGenerator {
             sherds.add(recipe.sherdIndices[3]);
             json.add("sherds", sherds);
             if(recipe.dyeIngredient != null)
-                json.add("dye_ingredient", Ingredient.CODEC_NONEMPTY.encodeStart(JsonOps.INSTANCE, recipe.dyeIngredient).getOrThrow());
+                json.add("dye_ingredient", Ingredient.CODEC.encodeStart(JsonOps.INSTANCE, recipe.dyeIngredient).getOrThrow());
             JsonObject recipeJson = new JsonObject();
             recipeJson.addProperty("show_notification", true);
             JsonArray pattern = new JsonArray();
             Arrays.stream(recipe.pattern).forEach(pattern::add);
             recipeJson.add("pattern", pattern);
             JsonObject keys = new JsonObject();
-            recipe.inputs.forEach((key, ingredient) -> keys.add(key.toString(), Ingredient.CODEC_NONEMPTY.encodeStart(JsonOps.INSTANCE, ingredient).getOrThrow()));
+            recipe.inputs.forEach((key, ingredient) -> {
+                if(ingredient.size() == 1)
+                    keys.addProperty(key.toString(), ingredient.getFirst());
+                else{
+                    JsonArray arr = new JsonArray(ingredient.size());
+                    ingredient.forEach(arr::add);
+                    keys.add(key.toString(), arr);
+                }
+            });
             recipeJson.add("key", keys);
             JsonObject result = new JsonObject();
             result.addProperty("id", Registries.ITEMS.getIdentifier(recipe.output).toString());
@@ -125,7 +138,7 @@ public class PotteryRecipeGenerator extends ResourceGenerator {
     private static class RecipeBuilder {
         private String[] pattern;
         private int[] sherdIndices;
-        private final Map<Character,Ingredient> inputs = new LinkedHashMap<>();
+        private final Map<Character,List<String>> inputs = new LinkedHashMap<>();
         private Ingredient dyeIngredient;
         private Item output;
 
@@ -148,14 +161,18 @@ public class PotteryRecipeGenerator extends ResourceGenerator {
             return this;
         }
 
-        public RecipeBuilder input(char key, Ingredient input){
-            if(this.inputs.put(key, input) != null)
+        private RecipeBuilder input(char key, String... input){
+            if(this.inputs.put(key, Arrays.asList(input)) != null)
                 throw new IllegalArgumentException("Duplicate input for character '" + key + "'!");
             return this;
         }
 
-        public RecipeBuilder input(char key, Item item){
-            return this.input(key, Ingredient.of(item));
+        public RecipeBuilder input(char key, ItemLike... items){
+            return this.input(key, Arrays.stream(items).map(ItemLike::asItem).map(Registries.ITEMS::getIdentifier).map(ResourceLocation::toString).toArray(String[]::new));
+        }
+
+        public RecipeBuilder input(char key, TagKey<Item> tag){
+            return this.input(key, "#" + tag.location());
         }
 
         public RecipeBuilder dye(Ingredient ingredient){

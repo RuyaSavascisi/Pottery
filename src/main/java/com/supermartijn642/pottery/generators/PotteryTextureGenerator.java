@@ -11,7 +11,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -61,7 +60,7 @@ public class PotteryTextureGenerator extends ResourceGenerator {
         for(PotColor color : PotColor.values()){
             if(color == PotColor.BLANK)
                 continue;
-            BuiltInRegistries.DECORATED_POT_PATTERN.holders()
+            BuiltInRegistries.DECORATED_POT_PATTERN.listElements()
                 .filter(holder -> holder.key().location().getNamespace().equals("minecraft"))
                 .map(holder -> holder.value().assetId().withPrefix("entity/decorated_pot/"))
                 .forEach(texture -> {

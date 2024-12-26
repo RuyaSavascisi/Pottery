@@ -9,10 +9,11 @@
             {
               "conditions": [
                 {
-                  "predicate": {
-                    "items": "#minecraft:breaks_decorated_pots"
+                  "block": "pottery:wide_pot_light_blue",
+                  "properties": {
+                    "cracked": "true"
                   },
-                  "condition": "minecraft:match_tool"
+                  "condition": "minecraft:block_state_property"
                 }
               ],
               "name": "minecraft:sherds",

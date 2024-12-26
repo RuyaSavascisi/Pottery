@@ -6,9 +6,7 @@
     2,
     1
   ],
-  "dye_ingredient": {
-    "item": "minecraft:orange_dye"
-  },
+  "dye_ingredient": "minecraft:orange_dye",
   "recipe": {
     "show_notification": true,
     "pattern": [
@@ -16,9 +14,7 @@
       " # "
     ],
     "key": {
-      "#": {
-        "tag": "minecraft:decorated_pot_ingredients"
-      }
+      "#": "#minecraft:decorated_pot_ingredients"
     },
     "result": {
       "id": "pottery:base_pot_orange"
