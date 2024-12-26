@@ -13,12 +13,8 @@
       "#B#"
     ],
     "key": {
-      "B": {
-        "item": "minecraft:brick"
-      },
-      "#": {
-        "tag": "minecraft:decorated_pot_ingredients"
-      }
+      "B": "minecraft:brick",
+      "#": "#minecraft:decorated_pot_ingredients"
     },
     "result": {
       "id": "pottery:wide_pot_blank"

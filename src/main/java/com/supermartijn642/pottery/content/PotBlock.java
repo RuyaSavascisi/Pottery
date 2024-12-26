@@ -17,6 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -30,8 +31,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
@@ -40,7 +41,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -63,7 +64,7 @@ import java.util.function.Consumer;
  */
 public class PotBlock extends BaseBlock implements EntityHoldingBlock, SimpleWaterloggedBlock {
 
-    public static final DirectionProperty HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty CRACKED = BlockStateProperties.CRACKED;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -197,10 +198,10 @@ public class PotBlock extends BaseBlock implements EntityHoldingBlock, SimpleWat
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction side, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos){
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess tickAccess, BlockPos pos, Direction side, BlockPos neighborPos, BlockState neighborState, RandomSource random){
         if(state.getValue(WATERLOGGED))
-            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-        return super.updateShape(state, side, neighborState, level, pos, neighborPos);
+            tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        return super.updateShape(state, level, tickAccess, pos, side, neighborPos, neighborState, random);
     }
 
     @Override
@@ -255,13 +256,13 @@ public class PotBlock extends BaseBlock implements EntityHoldingBlock, SimpleWat
     protected void appendItemInformation(ItemStack stack, Consumer<Component> info, boolean advanced){
         super.appendItemInformation(stack, info, advanced);
         PotDecorations decorations = stack.get(DataComponents.POT_DECORATIONS);
-        if(decorations != null && decorations != PotDecorations.EMPTY){
+        if(decorations != null && !decorations.equals(PotDecorations.EMPTY)){
             info.accept(CommonComponents.EMPTY);
             info.accept(TextComponents.string("Patterns:").color(ChatFormatting.GRAY).get());
-            info.accept(TextComponents.string(" Front: ").color(ChatFormatting.DARK_GRAY).append(decorations.front().orElse(Items.BRICK).getName(ItemStack.EMPTY).plainCopy().withStyle(decorations.front().isEmpty() ? ChatFormatting.GRAY : ChatFormatting.GOLD)).get());
-            info.accept(TextComponents.string(" Left: ").color(ChatFormatting.DARK_GRAY).append(decorations.left().orElse(Items.BRICK).getName(ItemStack.EMPTY).plainCopy().withStyle(decorations.left().isEmpty() ? ChatFormatting.GRAY : ChatFormatting.GOLD)).get());
-            info.accept(TextComponents.string(" Right: ").color(ChatFormatting.DARK_GRAY).append(decorations.right().orElse(Items.BRICK).getName(ItemStack.EMPTY).plainCopy().withStyle(decorations.right().isEmpty() ? ChatFormatting.GRAY : ChatFormatting.GOLD)).get());
-            info.accept(TextComponents.string(" Back: ").color(ChatFormatting.DARK_GRAY).append(decorations.back().orElse(Items.BRICK).getName(ItemStack.EMPTY).plainCopy().withStyle(decorations.back().isEmpty() ? ChatFormatting.GRAY : ChatFormatting.GOLD)).get());
+            info.accept(TextComponents.string(" Front: ").color(ChatFormatting.DARK_GRAY).append(decorations.front().orElse(Items.BRICK).getName().plainCopy().withStyle(decorations.front().isEmpty() ? ChatFormatting.GRAY : ChatFormatting.GOLD)).get());
+            info.accept(TextComponents.string(" Left: ").color(ChatFormatting.DARK_GRAY).append(decorations.left().orElse(Items.BRICK).getName().plainCopy().withStyle(decorations.left().isEmpty() ? ChatFormatting.GRAY : ChatFormatting.GOLD)).get());
+            info.accept(TextComponents.string(" Right: ").color(ChatFormatting.DARK_GRAY).append(decorations.right().orElse(Items.BRICK).getName().plainCopy().withStyle(decorations.right().isEmpty() ? ChatFormatting.GRAY : ChatFormatting.GOLD)).get());
+            info.accept(TextComponents.string(" Back: ").color(ChatFormatting.DARK_GRAY).append(decorations.back().orElse(Items.BRICK).getName().plainCopy().withStyle(decorations.back().isEmpty() ? ChatFormatting.GRAY : ChatFormatting.GOLD)).get());
         }
     }
 
@@ -275,14 +276,14 @@ public class PotBlock extends BaseBlock implements EntityHoldingBlock, SimpleWat
     @Override
     public void onProjectileHit(Level level, BlockState state, BlockHitResult blockHitResult, Projectile projectile){
         BlockPos pos = blockHitResult.getBlockPos();
-        if(!level.isClientSide && projectile.mayInteract(level, pos) && projectile.mayBreak(level)){
+        if(level instanceof ServerLevel && projectile.mayInteract((ServerLevel)level, pos) && projectile.mayBreak((ServerLevel)level)){
             level.setBlock(pos, state.setValue(CRACKED, true), 4);
             level.destroyBlock(pos, true, projectile);
         }
     }
 
     @Override
-    public boolean hasAnalogOutputSignal(BlockState state){
+    public boolean hasAnalogOutputSignal(BlockState blockState){
         return true;
     }
 
@@ -292,7 +293,7 @@ public class PotBlock extends BaseBlock implements EntityHoldingBlock, SimpleWat
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state){
+    public RenderShape getRenderShape(BlockState blockState){
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 

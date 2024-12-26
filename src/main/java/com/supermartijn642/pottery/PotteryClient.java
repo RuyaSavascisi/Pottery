@@ -27,7 +27,7 @@ public class PotteryClient {
             }
         }
         // Put all decorated pot patterns into the block atlas
-        BuiltInRegistries.DECORATED_POT_PATTERN.holders()
+        BuiltInRegistries.DECORATED_POT_PATTERN.listElements()
             .filter(holder -> holder.key().location().getNamespace().equals("minecraft"))
             .map(holder -> holder.value().assetId().withPrefix("entity/decorated_pot/"))
             .forEach(texture -> handler.registerAtlasSprite(TextureAtlases.getBlocks(), texture));

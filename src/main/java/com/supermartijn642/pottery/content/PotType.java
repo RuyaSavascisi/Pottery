@@ -6,11 +6,13 @@ import com.supermartijn642.core.item.BaseBlockItem;
 import com.supermartijn642.core.item.ItemProperties;
 import com.supermartijn642.core.registry.RegistrationHandler;
 import com.supermartijn642.pottery.Pottery;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.PotDecorations;
 
 import java.util.EnumMap;
 import java.util.Locale;
@@ -80,7 +82,9 @@ public enum PotType {
             if(this == DEFAULT && color == PotColor.BLANK)
                 continue;
             PotBlock block = this.blocks.get(color);
-            this.items.put(color, helper.register(this.getIdentifier(color), new BaseBlockItem(block, ItemProperties.create().group(Pottery.ITEM_GROUP))));
+            ItemProperties properties = ItemProperties.create().group(Pottery.ITEM_GROUP);
+            properties.component(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY);
+            this.items.put(color, helper.register(this.getIdentifier(color), new BaseBlockItem(block, properties)));
         }
     }
 
