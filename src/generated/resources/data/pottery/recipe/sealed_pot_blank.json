@@ -15,19 +15,11 @@
     ],
     "key": {
       "P": [
-        {
-          "item": "minecraft:stone_pressure_plate"
-        },
-        {
-          "item": "minecraft:polished_blackstone_pressure_plate"
-        }
+        "minecraft:stone_pressure_plate",
+        "minecraft:polished_blackstone_pressure_plate"
       ],
-      "B": {
-        "item": "minecraft:brick"
-      },
-      "#": {
-        "tag": "minecraft:decorated_pot_ingredients"
-      }
+      "B": "minecraft:brick",
+      "#": "#minecraft:decorated_pot_ingredients"
     },
     "result": {
       "id": "pottery:sealed_pot_blank"

@@ -8,7 +8,6 @@ import com.supermartijn642.pottery.content.PotColor;
 import com.supermartijn642.pottery.content.PotType;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 
 /**
  * Created 27/11/2023 by SuperMartijn642
@@ -30,7 +29,7 @@ public class PotteryClient implements ClientModInitializer {
             }
         }
         // Put all decorated pot patterns into the block atlas
-        BuiltInRegistries.DECORATED_POT_PATTERN.holders()
+        BuiltInRegistries.DECORATED_POT_PATTERN.listElements()
             .filter(holder -> holder.key().location().getNamespace().equals("minecraft"))
             .map(holder -> holder.value().assetId().withPrefix("entity/decorated_pot/"))
             .forEach(texture -> handler.registerAtlasSprite(TextureAtlases.getBlocks(), texture));

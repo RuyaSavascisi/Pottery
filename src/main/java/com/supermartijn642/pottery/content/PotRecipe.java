@@ -58,12 +58,13 @@ public class PotRecipe extends ShapedRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer(){
+    public RecipeSerializer<PotRecipe> getSerializer(){
         return SERIALIZER;
     }
 
     private PotDecorations findRecipeDecorations(CraftingInput input){
-        if(!this.canCraftInDimensions(input.width(), input.height()))
+        if(this.dyeIngredient == null ? input.ingredientCount() != this.pattern.ingredientCount
+            : input.ingredientCount() < this.pattern.ingredientCount || input.ingredientCount() > this.pattern.ingredientCount + 1)
             return null;
 
         for(int x = 0; x <= input.width() - this.getWidth(); ++x){
@@ -93,13 +94,13 @@ public class PotRecipe extends ShapedRecipe {
                 int relativeX = x - startX;
                 int relativeY = y - startY;
                 if(relativeX >= 0 && relativeY >= 0 && relativeX < this.getWidth() && relativeY < this.getHeight()){
-                    Ingredient ingredient = this.getIngredients().get(mirrored ?
+                    Optional<Ingredient> ingredient = this.getIngredients().get(mirrored ?
                         this.getWidth() - relativeX - 1 + relativeY * this.getWidth() :
                         relativeX + relativeY * this.getWidth()
                     );
-                    if(!ingredient.test(stack))
+                    if(!Ingredient.testOptionalIngredient(ingredient, stack))
                         return null;
-                }else if(!Ingredient.EMPTY.test(stack))
+                }else if(!stack.isEmpty())
                     return null;
             }
         }
@@ -119,13 +120,13 @@ public class PotRecipe extends ShapedRecipe {
         private static final Function<Integer,DataResult<Integer>> GEQUAL_TO_ZERO = integer -> integer < 0 ? DataResult.error(() -> "Value '" + integer + "' is less than 0!") : DataResult.success(integer);
         private static final MapCodec<PotRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ShapedRecipe.Serializer.CODEC.fieldOf("recipe").forGetter(recipe -> null),
-            Ingredient.CODEC_NONEMPTY.optionalFieldOf("dye_ingredient").forGetter(recipe -> Optional.of(recipe.dyeIngredient)),
+            Ingredient.CODEC.optionalFieldOf("dye_ingredient").forGetter(recipe -> Optional.of(recipe.dyeIngredient)),
             Codec.INT.flatXmap(GEQUAL_TO_ZERO, GEQUAL_TO_ZERO).listOf().fieldOf("sherds").forGetter(recipe -> IntStream.of(recipe.sherdIndices).boxed().toList())
         ).apply(instance, (shapedRecipe, dyeIngredient, sherdIndices) -> new PotRecipe(
-            shapedRecipe.getGroup(),
+            shapedRecipe.group(),
             shapedRecipe.category(),
             shapedRecipe.pattern,
-            shapedRecipe.getResultItem(null),
+            shapedRecipe.assemble(null, null),
             shapedRecipe.showNotification(),
             dyeIngredient.orElse(null),
             sherdIndices.stream().mapToInt(i -> i).toArray()
@@ -149,10 +150,10 @@ public class PotRecipe extends ShapedRecipe {
             if(sherdIndices.length != 4)
                 throw new IllegalArgumentException();
             return new PotRecipe(
-                shapedRecipe.getGroup(),
+                shapedRecipe.group(),
                 shapedRecipe.category(),
                 shapedRecipe.pattern,
-                shapedRecipe.getResultItem(null),
+                shapedRecipe.assemble(null, null),
                 shapedRecipe.showNotification(),
                 dyeIngredient,
                 sherdIndices

@@ -35,46 +35,47 @@ public class PotteryJeiPlugin implements IModPlugin {
 
     @Override
     public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration){
-        registration.getCraftingCategory().addExtension(PotRecipe.class, new ICraftingCategoryExtension<PotRecipe>() {
-            @Override
-            public void setRecipe(RecipeHolder<PotRecipe> recipeHolder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses){
-                PotRecipe recipe = recipeHolder.value();
-                // Inputs
-                int width = this.getWidth(recipeHolder);
-                int height = this.getHeight(recipeHolder);
-                List<List<ItemStack>> inputs = recipe.getIngredients().stream()
-                    .map(Ingredient::getItems)
-                    .map(Arrays::asList)
-                    .collect(Collectors.toCollection(ArrayList::new));
-                Ingredient dyeIngredient = recipe.getDyeIngredient();
-                if(dyeIngredient != null){
-                    for(int i = 0; i < inputs.size(); i++){
-                        if(inputs.get(i).isEmpty()){
-                            inputs.set(i, Arrays.asList(dyeIngredient.getItems()));
-                            break;
-                        }
-                    }
-                }
-                craftingGridHelper.createAndSetInputs(builder, inputs, width, height);
-                // Output
-                ItemStack resultItem = RecipeUtil.getResultItem(recipe);
-                craftingGridHelper.createAndSetOutputs(builder, List.of(resultItem));
-            }
-
-            @Override
-            public Optional<ResourceLocation> getRegistryName(RecipeHolder<PotRecipe> recipeHolder){
-                return Optional.of(recipeHolder.id());
-            }
-
-            @Override
-            public int getWidth(RecipeHolder<PotRecipe> recipeHolder){
-                return recipeHolder.value().getWidth();
-            }
-
-            @Override
-            public int getHeight(RecipeHolder<PotRecipe> recipeHolder){
-                return recipeHolder.value().getHeight();
-            }
-        });
+        // TODO read whenever JEI updates
+//        registration.getCraftingCategory().addExtension(PotRecipe.class, new ICraftingCategoryExtension<PotRecipe>() {
+//            @Override
+//            public void setRecipe(RecipeHolder<PotRecipe> recipeHolder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses){
+//                PotRecipe recipe = recipeHolder.value();
+//                // Inputs
+//                int width = this.getWidth(recipeHolder);
+//                int height = this.getHeight(recipeHolder);
+//                List<List<ItemStack>> inputs = recipe.getIngredients().stream()
+//                    .map(Ingredient::getItems)
+//                    .map(Arrays::asList)
+//                    .collect(Collectors.toCollection(ArrayList::new));
+//                Ingredient dyeIngredient = recipe.getDyeIngredient();
+//                if(dyeIngredient != null){
+//                    for(int i = 0; i < inputs.size(); i++){
+//                        if(inputs.get(i).isEmpty()){
+//                            inputs.set(i, Arrays.asList(dyeIngredient.getItems()));
+//                            break;
+//                        }
+//                    }
+//                }
+//                craftingGridHelper.createAndSetInputs(builder, inputs, width, height);
+//                // Output
+//                ItemStack resultItem = RecipeUtil.getResultItem(recipe);
+//                craftingGridHelper.createAndSetOutputs(builder, List.of(resultItem));
+//            }
+//
+//            @Override
+//            public Optional<ResourceLocation> getRegistryName(RecipeHolder<PotRecipe> recipeHolder){
+//                return Optional.of(recipeHolder.id());
+//            }
+//
+//            @Override
+//            public int getWidth(RecipeHolder<PotRecipe> recipeHolder){
+//                return recipeHolder.value().getWidth();
+//            }
+//
+//            @Override
+//            public int getHeight(RecipeHolder<PotRecipe> recipeHolder){
+//                return recipeHolder.value().getHeight();
+//            }
+//        });
     }
 }
