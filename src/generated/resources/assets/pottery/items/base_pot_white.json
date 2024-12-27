@@ -1,0 +1,6 @@
+{
+  "model": {
+    "model": "pottery:block/base_pot/base_pot_white",
+    "type": "pottery:decorated_pot"
+  }
+}

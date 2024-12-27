@@ -2,10 +2,7 @@ package com.supermartijn642.pottery;
 
 import com.supermartijn642.core.registry.ClientRegistrationHandler;
 import com.supermartijn642.core.render.TextureAtlases;
-import com.supermartijn642.pottery.content.PotBakedModel;
-import com.supermartijn642.pottery.content.PotBlockRenderer;
-import com.supermartijn642.pottery.content.PotColor;
-import com.supermartijn642.pottery.content.PotType;
+import com.supermartijn642.pottery.content.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.core.registries.BuiltInRegistries;
 
@@ -28,6 +25,8 @@ public class PotteryClient implements ClientModInitializer {
                 handler.registerBlockModelOverwrite(() -> type.getBlock(color), PotBakedModel::new);
             }
         }
+        // Register pot item model
+        handler.registerItemModelType("decorated_pot", PotItemModel.CODEC);
         // Put all decorated pot patterns into the block atlas
         BuiltInRegistries.DECORATED_POT_PATTERN.listElements()
             .filter(holder -> holder.key().location().getNamespace().equals("minecraft"))

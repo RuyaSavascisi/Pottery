@@ -109,8 +109,11 @@ public class PotBlock extends BaseBlock implements EntityHoldingBlock, SimpleWat
                         .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
                     level.setBlock(pos, newState, Block.UPDATE_ALL);
                     entity = level.getBlockEntity(pos);
-                    if(entity instanceof DecoratedPotBlockEntity)
-                        ((DecoratedPotBlockEntity)entity).setFromItem(DecoratedPotBlockEntity.createDecoratedPotItem(decorations));
+                    if(entity instanceof DecoratedPotBlockEntity){
+                        ((DecoratedPotBlockEntity)entity).decorations = decorations;
+                        entity.setChanged();
+                        level.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS);
+                    }
                 }else{
                     BlockState newState = this.type.getBlock(color).defaultBlockState()
                         .setValue(HORIZONTAL_FACING, state.getValue(HORIZONTAL_FACING))
@@ -267,10 +270,10 @@ public class PotBlock extends BaseBlock implements EntityHoldingBlock, SimpleWat
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state){
+    protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData){
         if(level.getBlockEntity(pos) instanceof PotBlockEntity entity)
             return entity.itemFromDecorations();
-        return super.getCloneItemStack(level, pos, state);
+        return super.getCloneItemStack(level, pos, state, includeData);
     }
 
     @Override
@@ -294,7 +297,7 @@ public class PotBlock extends BaseBlock implements EntityHoldingBlock, SimpleWat
 
     @Override
     public RenderShape getRenderShape(BlockState blockState){
-        return RenderShape.ENTITYBLOCK_ANIMATED;
+        return RenderShape.INVISIBLE;
     }
 
     @Override

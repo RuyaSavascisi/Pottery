@@ -6,8 +6,7 @@ import com.mojang.blaze3d.vertex.VertexFormatElement;
 import com.supermartijn642.core.ClientUtils;
 import com.supermartijn642.core.render.TextureAtlases;
 import com.supermartijn642.pottery.Pottery;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.minecraft.client.renderer.block.model.BakedOverrides;
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -34,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -48,6 +48,7 @@ public class PotBakedModel implements BakedModel {
     private static final ThreadLocal<PotData> MODEL_DATA = new ThreadLocal<>();
 
     private final BakedModel original;
+    public ItemStack stack = ItemStack.EMPTY;
 
     public PotBakedModel(BakedModel original){
         this.original = original;
@@ -59,10 +60,10 @@ public class PotBakedModel implements BakedModel {
     }
 
     @Override
-    public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context){
+    public void emitBlockQuads(QuadEmitter emitter, BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, Predicate<@Nullable Direction> cullTest){
         BlockEntity entity;
         if(!(state.getBlock() instanceof PotBlock) || !((entity = blockView.getBlockEntity(pos)) instanceof PotBlockEntity)){
-            BakedModel.super.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+            BakedModel.super.emitBlockQuads(emitter, blockView, state, pos, randomSupplier, cullTest);
             return;
         }
 
@@ -72,29 +73,29 @@ public class PotBakedModel implements BakedModel {
         Direction facing = state.getValue(PotBlock.HORIZONTAL_FACING);
         MODEL_DATA.set(new PotData(type, color, facing, decorations));
         try{
-            BakedModel.super.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+            BakedModel.super.emitBlockQuads(emitter, blockView, state, pos, randomSupplier, cullTest);
         }finally{
-            MODEL_DATA.set(null);
+            MODEL_DATA.remove();
         }
     }
 
     @Override
-    public void emitItemQuads(ItemStack stack, Supplier<RandomSource> randomSupplier, RenderContext context){
-        Block block = stack.getItem() instanceof BlockItem ? ((BlockItem)stack.getItem()).getBlock() : null;
-        if(block == null || !(block instanceof PotBlock)){
-            BakedModel.super.emitItemQuads(stack, randomSupplier, context);
+    public void emitItemQuads(QuadEmitter emitter, Supplier<RandomSource> randomSupplier){
+        Block block = this.stack.getItem() instanceof BlockItem ? ((BlockItem)this.stack.getItem()).getBlock() : null;
+        if(!(block instanceof PotBlock)){
+            BakedModel.super.emitItemQuads(emitter, randomSupplier);
             return;
         }
 
         PotType type = ((PotBlock)block).getType();
         PotColor color = ((PotBlock)block).getColor();
-        PotDecorations decorations = stack.get(DataComponents.POT_DECORATIONS);
+        PotDecorations decorations = this.stack.get(DataComponents.POT_DECORATIONS);
         if(decorations == null) decorations = PotDecorations.EMPTY;
         MODEL_DATA.set(new PotData(type, color, Direction.SOUTH, decorations));
         try{
-            BakedModel.super.emitItemQuads(stack, randomSupplier, context);
+            BakedModel.super.emitItemQuads(emitter, randomSupplier);
         }finally{
-            MODEL_DATA.set(null);
+            MODEL_DATA.remove();
         }
     }
 
@@ -191,11 +192,6 @@ public class PotBakedModel implements BakedModel {
     }
 
     @Override
-    public boolean isCustomRenderer(){
-        return this.original.isCustomRenderer();
-    }
-
-    @Override
     public TextureAtlasSprite getParticleIcon(){
         return this.original.getParticleIcon();
     }
@@ -203,11 +199,6 @@ public class PotBakedModel implements BakedModel {
     @Override
     public ItemTransforms getTransforms(){
         return this.original.getTransforms();
-    }
-
-    @Override
-    public BakedOverrides overrides(){
-        return this.original.overrides();
     }
 
     private record PotData(PotType type, PotColor color, Direction facing, PotDecorations decorations) {

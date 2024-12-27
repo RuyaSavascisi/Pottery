@@ -33,9 +33,6 @@ public class PotteryModelGenerator extends ModelGenerator {
                         .texture("base", type.getIdentifier() + "/" + type.getIdentifier(color))
                         .texture("side", type.getIdentifier() + "/" + type.getIdentifier(color) + "_side")
                         .particleTexture("#base");
-                // Item model
-                this.model("item/" + type.getIdentifier(color))
-                    .parent("block/" + type.getIdentifier() + "/" + type.getIdentifier(color));
             }
         }
     }
