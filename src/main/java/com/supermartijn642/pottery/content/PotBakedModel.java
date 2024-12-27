@@ -7,7 +7,6 @@ import com.supermartijn642.core.ClientUtils;
 import com.supermartijn642.core.render.TextureAtlases;
 import com.supermartijn642.pottery.Pottery;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedOverrides;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -179,11 +178,6 @@ public class PotBakedModel implements BakedModel, IDynamicBakedModel {
     }
 
     @Override
-    public boolean isCustomRenderer(){
-        return this.original.isCustomRenderer();
-    }
-
-    @Override
     public TextureAtlasSprite getParticleIcon(){
         return this.original.getParticleIcon();
     }
@@ -191,11 +185,6 @@ public class PotBakedModel implements BakedModel, IDynamicBakedModel {
     @Override
     public ItemTransforms getTransforms(){
         return this.original.getTransforms();
-    }
-
-    @Override
-    public BakedOverrides overrides(){
-        return this.original.overrides();
     }
 
     private record PotData(PotType type, PotColor color, Direction facing, PotDecorations decorations) {

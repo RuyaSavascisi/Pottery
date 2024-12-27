@@ -1910,11 +1910,11 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:wide_pot/wide_pot_yellow"
+      "resource": "pottery:tall_pot/tall_pot_pink_side"
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:tall_pot/tall_pot_pink_side"
+      "resource": "pottery:wide_pot/wide_pot_yellow"
     },
     {
       "type": "minecraft:single",
@@ -1926,11 +1926,11 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:base_pot/base_pot_magenta"
+      "resource": "pottery:small_pot/small_pot_red"
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:small_pot/small_pot_red"
+      "resource": "pottery:base_pot/base_pot_magenta"
     },
     {
       "type": "minecraft:single",
@@ -2074,11 +2074,11 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:base_pot/base_pot_lime"
+      "resource": "pottery:base_pot/base_pot_yellow"
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:base_pot/base_pot_yellow"
+      "resource": "pottery:base_pot/base_pot_lime"
     },
     {
       "type": "minecraft:single",
@@ -2090,11 +2090,11 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:wide_pot/wide_pot_light_gray_side"
+      "resource": "pottery:tall_pot/tall_pot_light_gray_side"
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:tall_pot/tall_pot_light_gray_side"
+      "resource": "pottery:wide_pot/wide_pot_light_gray_side"
     },
     {
       "type": "minecraft:single",
@@ -2138,11 +2138,11 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:sealed_pot/sealed_pot_light_blue_side"
+      "resource": "pottery:tall_pot/tall_pot_lime"
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:tall_pot/tall_pot_lime"
+      "resource": "pottery:sealed_pot/sealed_pot_light_blue_side"
     },
     {
       "type": "minecraft:single",
@@ -2222,15 +2222,15 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:tall_pot/tall_pot_brown"
-    },
-    {
-      "type": "minecraft:single",
       "resource": "pottery:small_pot/small_pot_red_side"
     },
     {
       "type": "minecraft:single",
       "resource": "pottery:tall_pot/tall_pot_red"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "pottery:tall_pot/tall_pot_brown"
     },
     {
       "type": "minecraft:single",
@@ -2246,11 +2246,11 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:tall_pot/tall_pot_brown_side"
+      "resource": "pottery:base_pot/base_pot_cyan_side"
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:base_pot/base_pot_cyan_side"
+      "resource": "pottery:tall_pot/tall_pot_brown_side"
     },
     {
       "type": "minecraft:single",
@@ -2266,11 +2266,11 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:tall_pot/tall_pot_blue_side"
+      "resource": "pottery:wide_pot/wide_pot_gray"
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:wide_pot/wide_pot_gray"
+      "resource": "pottery:tall_pot/tall_pot_blue_side"
     },
     {
       "type": "minecraft:single",
@@ -2322,19 +2322,19 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:wide_pot/wide_pot_black_side"
-    },
-    {
-      "type": "minecraft:single",
       "resource": "pottery:sealed_pot/sealed_pot_purple_side"
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:sealed_pot/sealed_pot_cyan_side"
+      "resource": "pottery:wide_pot/wide_pot_black_side"
     },
     {
       "type": "minecraft:single",
       "resource": "pottery:base_pot/base_pot_cyan"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "pottery:sealed_pot/sealed_pot_cyan_side"
     },
     {
       "type": "minecraft:single",
@@ -2370,11 +2370,11 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:tall_pot/tall_pot_purple_side"
+      "resource": "pottery:wide_pot/wide_pot_blue_side"
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:wide_pot/wide_pot_blue_side"
+      "resource": "pottery:tall_pot/tall_pot_purple_side"
     },
     {
       "type": "minecraft:single",
@@ -2386,15 +2386,15 @@
     },
     {
       "type": "minecraft:single",
+      "resource": "pottery:default_pot/default_pot_green"
+    },
+    {
+      "type": "minecraft:single",
       "resource": "pottery:tall_pot/tall_pot_white"
     },
     {
       "type": "minecraft:single",
       "resource": "pottery:wide_pot/wide_pot_light_blue"
-    },
-    {
-      "type": "minecraft:single",
-      "resource": "pottery:default_pot/default_pot_green"
     },
     {
       "type": "minecraft:single",
@@ -2426,11 +2426,11 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:base_pot/base_pot_brown"
+      "resource": "pottery:small_pot/small_pot_lime_side"
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:small_pot/small_pot_lime_side"
+      "resource": "pottery:base_pot/base_pot_brown"
     },
     {
       "type": "minecraft:single",
@@ -2586,15 +2586,15 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:base_pot/base_pot_white"
-    },
-    {
-      "type": "minecraft:single",
       "resource": "pottery:base_pot/base_pot_orange"
     },
     {
       "type": "minecraft:single",
       "resource": "pottery:tall_pot/tall_pot_black"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "pottery:base_pot/base_pot_white"
     },
     {
       "type": "minecraft:single",
@@ -2610,11 +2610,11 @@
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:small_pot/small_pot_green_side"
+      "resource": "pottery:sealed_pot/sealed_pot_yellow"
     },
     {
       "type": "minecraft:single",
-      "resource": "pottery:sealed_pot/sealed_pot_yellow"
+      "resource": "pottery:small_pot/small_pot_green_side"
     },
     {
       "type": "minecraft:single",

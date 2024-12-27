@@ -106,8 +106,7 @@ public class PotEventHandlers {
 
                 if(!level.isClientSide){
                     // Update the decorations
-                    PotDecorations newDecorations = DecorationUtils.setDecorationItem(decorations, state.getValue(PotBlock.HORIZONTAL_FACING), hitSide, Optional.of(stack.getItem()));
-                    entity.setFromItem(DecoratedPotBlockEntity.createDecoratedPotItem(newDecorations));
+                    entity.decorations = DecorationUtils.setDecorationItem(decorations, state.getValue(PotBlock.HORIZONTAL_FACING), hitSide, Optional.of(stack.getItem()));
                     entity.setChanged();
                     level.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS);
                     if(!player.isCreative()){

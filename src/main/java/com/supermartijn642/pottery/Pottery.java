@@ -52,6 +52,7 @@ public class Pottery {
         GeneratorRegistrationHandler handler = GeneratorRegistrationHandler.get(MODID);
         handler.addGenerator(PotteryAtlasSourceGenerator::new);
         handler.addGenerator(PotteryBlockStateGenerator::new);
+        handler.addGenerator(PotteryItemInfoGenerator::new);
         handler.addGenerator(PotteryLanguageGenerator::new);
         handler.addGenerator(PotteryLootTableGenerator::new);
         handler.addGenerator(PotteryModelGenerator::new);
